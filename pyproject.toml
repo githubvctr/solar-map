@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "solar-map"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.32.3"
+pandas = "^2.2.3"
+geopandas = "^1.0.1"
+folium = "^0.19.5"
+pathlib = "^1.0.1"
+branca = "^0.8.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
