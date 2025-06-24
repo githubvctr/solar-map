@@ -2,17 +2,21 @@
 name = "solar-map"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Your Name <victorbarna@hotmail.fr>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
 requests = "^2.32.3"
 pandas = "^2.2.3"
-geopandas = "^1.0.1"
+geopandas = "<1.0"
 folium = "^0.19.5"
 pathlib = "^1.0.1"
 branca = "^0.8.1"
+streamlit = "^1.46.0"
+streamlit-folium = "^0.25.0"
+matplotlib = "<3.10"
+shapely = "<2.0"
 
 
 [build-system]
