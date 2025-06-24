@@ -16,6 +16,7 @@ Some more ideas of interactive features are under intense category 5 brain storm
    ```bash
    pip install poetry
 2. Clone the respo and navigate into the project folder:
+    ```bash
     git clone https://github.com/githubvctr/solar-map.git
     cd solar-map
 3. Install all dependencies (to import all the librairies used to make this project run):
