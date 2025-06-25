@@ -17,6 +17,7 @@ streamlit = "^1.46.0"
 streamlit-folium = "^0.25.0"
 matplotlib = "<3.10"
 shapely = "<2.0"
+dotenv = "^0.9.9"
 
 
 [build-system]
