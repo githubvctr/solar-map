@@ -21,11 +21,14 @@ Some more ideas of interactive features are under intense category 5 brain storm
     cd solar-map
 3. Install all dependencies (to import all the librairies used to make this project run):
     ```bash
-    poetry install
-4. Sctivate the virtual environment:
+    poetry install --no-root
+4. Activate the virtual environment:
     ```bash
     poetry shell
 5. Run the project through streamlit:
     ```bash
     streamlit run streamlit_app/app.py
-6. Use it!
+7. To generate a summary of all scripts and functions in the project (helpful for LLMs likeContinue or Copilot):
+    ```bash
+    make summary
+7. Use it!

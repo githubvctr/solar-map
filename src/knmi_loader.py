@@ -1,9 +1,9 @@
+# knmi_loader.py
 import os
 import requests
 import pandas as pd
 from dotenv import load_dotenv
 
-# Load API token from .env file
 load_dotenv()
 API_TOKEN = os.getenv("KNMI_API_TOKEN")
 
@@ -18,6 +18,8 @@ HEADERS = {
 def list_available_files():
     url = f"{BASE_URL}/datasets/{DATASET}/versions/{VERSION}/files"
     r = requests.get(url, headers=HEADERS)
+    print("Response status:", r.status_code)
+    print("Response text:", r.text)  # debug print
     r.raise_for_status()
     return r.json()["files"]
 
