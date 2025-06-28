@@ -26,10 +26,31 @@ if "selected_municipalities" not in st.session_state:
 @st.cache_data
 def load_and_prepare_data():
     df = load_solar_data()
-    df = df[df["Coordinates"].notnull()]
+    # Only keep Name, Coordinates, and Installaties (aantal)
+    df = df[["Name", "Coordinates", "Installaties (aantal)"]]
+    # Remove rows with NaN in key columns
+    df = df.dropna(subset=["Name", "Coordinates", "Installaties (aantal)"])
     df["Coordinates"] = df["Coordinates"].apply(ast.literal_eval)
-    df["geometry"] = df["Coordinates"].apply(Polygon)
-    df["capacity_mwp"] = df["Opgesteld vermogen van zonnepanelen (kW)"] / 1000
+    def safe_polygon(coords):
+        if not coords:
+            return None
+        # Handle MultiPolygon (list of polygons)
+        if isinstance(coords[0][0][0], (float, int)):
+            # MultiPolygon: take first polygon
+            shell = coords[0]
+        elif isinstance(coords[0][0], (float, int)):
+            # Polygon: take as is
+            shell = coords
+        else:
+            return None
+        if len(shell) < 3:
+            return None
+        try:
+            return Polygon(shell)
+        except Exception:
+            return None
+    df["geometry"] = df["Coordinates"].apply(safe_polygon)
+    df = df[df["geometry"].notnull()]
     return gpd.GeoDataFrame(df, geometry="geometry", crs="EPSG:4326")
 
 # --- UI Layout ---
@@ -38,14 +59,14 @@ st.title("NL Solar PV Capacity Map")
 
 # --- Load Data ---
 gdf = load_and_prepare_data()
-min_capacity = capacity_filter_slider(gdf["capacity_mwp"].max())
-filtered = gdf[gdf["capacity_mwp"] >= min_capacity]
+min_installations = capacity_filter_slider(gdf["Installaties (aantal)"].max())
+filtered = gdf[gdf["Installaties (aantal)"] >= min_installations]
 
 # --- Colormap ---
 colormap = cm.linear.YlOrRd_09.scale(
-    gdf["capacity_mwp"].min(), gdf["capacity_mwp"].max()
+    gdf["Installaties (aantal)"].min(), gdf["Installaties (aantal)"].max()
 )
-colormap.caption = "Installed Solar Capacity (MWp)"
+colormap.caption = "Number of Installations"
 
 # --- Enable interactive selection ---
 enable_selection = enable_selection_mode()
@@ -53,9 +74,9 @@ enable_selection = enable_selection_mode()
 # --- Build Map ---
 m = build_map(gdf, colormap, filtered, enable_selection)
 
-# --- Add Custom Legend ---
-legend = create_custom_legend(colormap)
-m.add_child(legend)
+# # --- Add Custom Legend ---
+# legend = create_custom_legend(colormap)
+# m.add_child(legend)
 
 # --- Display Map ---
 output = st_folium(m, width=1100, height=700)

@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from pathlib import Path
 
-def load_solar_data(csv_path="data/processed/solar_data_and_coordinates_NL.csv") -> pd.DataFrame:
+def load_solar_data(csv_path="data/processed/2024_solar_data_and_coordinates_NL.csv") -> pd.DataFrame:
     """
     Loads the cleaned solar panel data from a CSV file.
 

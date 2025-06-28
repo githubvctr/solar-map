@@ -7,7 +7,8 @@ def main():
 
     def summarize_file(file_path: Path):
         try:
-            tree = ast.parse(file_path.read_text())
+            source = file_path.read_text()
+            tree = ast.parse(source)
         except Exception as e:
             return [f"# Failed to parse {file_path.name}: {e}"]
 
@@ -15,13 +16,22 @@ def main():
         for node in tree.body:
             if isinstance(node, ast.FunctionDef):
                 args = ", ".join(arg.arg for arg in node.args.args)
+                docstring = ast.get_docstring(node)
                 lines.append(f"- def {node.name}({args}):")
+                if docstring:
+                    lines.append(f'    """{docstring.strip().splitlines()[0]}"""')
             elif isinstance(node, ast.ClassDef):
                 lines.append(f"- class {node.name}:")
+                class_doc = ast.get_docstring(node)
+                if class_doc:
+                    lines.append(f'    """{class_doc.strip().splitlines()[0]}"""')
                 for item in node.body:
                     if isinstance(item, ast.FunctionDef):
                         method_args = ", ".join(arg.arg for arg in item.args.args)
+                        method_doc = ast.get_docstring(item)
                         lines.append(f"  - def {item.name}({method_args}):")
+                        if method_doc:
+                            lines.append(f'      """{method_doc.strip().splitlines()[0]}"""')
         return lines
 
     for py_file in project_root.rglob("*.py"):
