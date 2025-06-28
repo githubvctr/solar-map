@@ -11,7 +11,8 @@ def build_map(gdf, colormap, filtered, enable_selection=False):
     gdf["density"] = gdf["Installaties (aantal)"] / gdf["area_km2"]
     filtered = gdf.loc[filtered.index]
 
-    m = folium.Map(location=[52.1, 5.2], zoom_start=7)
+    # Center the map ~100km east of the current center (approx 1.4 degrees longitude)
+    m = folium.Map(location=[51.3, 8.9], zoom_start=7)
 
     # Use quantiles for density
     values = filtered["density"].values
