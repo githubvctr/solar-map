@@ -7,7 +7,7 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
+python = ">=3.11,<4.0"
 requests = "^2.32.3"
 pandas = "^2.2.3"
 geopandas = "<1.0"
@@ -19,6 +19,10 @@ streamlit-folium = "^0.25.0"
 matplotlib = "<3.10"
 shapely = "<2.0"
 dotenv = "^0.9.9"
+pykrige = "^1.7.2"
+scipy = "^1.16.0"
+xarray = "^2025.6.1"
+netcdf4 = "^1.7.2"
 
 [tool.poetry.scripts]
 summarize = "tools.summarize_project:main"

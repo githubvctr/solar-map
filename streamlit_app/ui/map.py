@@ -1,4 +1,4 @@
-def build_map(gdf, colormap, filtered, enable_selection=False):
+def build_map(gdf, colormap, filtered, enable_selection=False, radiation_df=None):
     import folium
     from folium import GeoJson, GeoJsonTooltip
     from shapely.geometry import Point
@@ -11,7 +11,8 @@ def build_map(gdf, colormap, filtered, enable_selection=False):
     gdf["density"] = gdf["Installaties (aantal)"] / gdf["area_km2"]
     filtered = gdf.loc[filtered.index]
 
-    m = folium.Map(location=[52.1, 5.2], zoom_start=7)
+    # Center the map ~100km east of the current center (approx 1.4 degrees longitude)
+    m = folium.Map(location=[51.3, 8.9], zoom_start=7)
 
     # Use quantiles for density
     values = filtered["density"].values
@@ -47,6 +48,18 @@ def build_map(gdf, colormap, filtered, enable_selection=False):
     )
 
     gj.add_to(m)
+    # Add radiation points if provided
+    if radiation_df is not None and not radiation_df.empty:
+        for _, row in radiation_df.iterrows():
+            folium.CircleMarker(
+                location=[row["lat"], row["lon"]],
+                radius=7,
+                color="#007fff",
+                fill=True,
+                fill_color="#007fff",
+                fill_opacity=0.8,
+                popup=f"{row['stationname']}<br>Radiation: {row['radiation']} W/m²",
+            ).add_to(m)
     # Add custom legend for density per km² with quantile percentages
     legend_html = f'''
      <div style="position: fixed; 
